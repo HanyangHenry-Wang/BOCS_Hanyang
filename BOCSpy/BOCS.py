@@ -46,7 +46,7 @@ def BOCS(inputs, order, acquisitionFn):
 	for t in range(n_iter):
 
 		# Draw alpha vector
-		alpha_t = LR.alpha
+		alpha_t = LR.alpha  # aplha_t is a sample from the distribution
 
 		# Run SA optimization
 		if acquisitionFn == 'SA':
@@ -65,6 +65,8 @@ def BOCS(inputs, order, acquisitionFn):
 			# Find optimal solution
 			min_idx = np.argmin(SA_obj)
 			x_new = SA_model[min_idx,:]
+   
+	
 
 		# Run semidefinite relaxation for order 2 model with l1 loss
 		elif order == 2 and acquisitionFn == 'SDP-l1':
@@ -75,7 +77,10 @@ def BOCS(inputs, order, acquisitionFn):
 		# evaluate model objective at new evaluation point
 		x_new = x_new.reshape((1,n_vars))
 		y_new = model(x_new)
+  
+		print(x_new)
 
+  
 		# Update inputs dictionary
 		inputs['x_vals'] = np.vstack((inputs['x_vals'], x_new))
 		inputs['y_vals'] = np.hstack((inputs['y_vals'], y_new))
